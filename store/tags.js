@@ -13,7 +13,7 @@ export const mutations = {
         state.categorias = payload
     },
     addTag(state, payload) {
-        state.tags.push(payload)
+        state.tags.unshift(payload)
     },
     updateTag(state, payload) {
         const ind = state.tags.findIndex(t => t.id === payload.id)
@@ -25,6 +25,18 @@ export const mutations = {
 }
 
 export const actions = {
+    async createTag({ commit }, payload) {
+        let data = {...payload}
+
+        // request headers
+        const token = this.$auth.strategy.token.get()
+        const headers = { 'Authorization' : token }
+
+        data = (await this.$axios.post(`/tag`, data, { headers })).data
+        commit('addTag', data)
+    },
+
+
     async fetchTags({ commit }) {
         const token = this.$auth.strategy.token.get()
         const headers = { 'Authorization' : token }
