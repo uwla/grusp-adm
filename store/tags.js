@@ -36,7 +36,6 @@ export const actions = {
         commit('addTag', data)
     },
 
-
     async fetchTags({ commit }) {
         const token = this.$auth.strategy.token.get()
         const headers = { 'Authorization' : token }
@@ -66,16 +65,13 @@ export const actions = {
 
 
     async deleteTag({ commit }, payload) {
-        const data = {...payload}
-
-        // add field
-        data._method = "DELETE"
+        let data = {...payload}
 
         // request headers
         const token = this.$auth.strategy.token.get()
         const headers = { 'Authorization' : token }
 
-        await this.$axios.delete(`/tag/${data.id}`, { headers })
+        await this.$axios.delete(`/tag/${data.id}`, { headers, data })
         commit('deleteTag', data)
     },
 }

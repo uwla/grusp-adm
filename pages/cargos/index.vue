@@ -1,22 +1,23 @@
 <template>
     <main>
-        <h1>TAGS</h1>
+        <h1>CARGOS</h1>
 
-        <b-button variant="success" @click="showCreateForm()">CRIAR TAG</b-button>
+        <b-button variant="success" @click="showCreateForm()">CRIAR CARGO</b-button>
 
-        <vue-data-table v-bind="options" :data="tags" @userEvent="showForm" />
+        <vue-data-table v-bind="options" :data="roles" @userEvent="showForm" />
 
-        <b-modal ref="form-create" title="CRIAR TAG" hide-footer>
+        <b-modal ref="form-create" title="CRIAR CARGO" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="tag.name"  name="name" />
+                    <b-form-input v-model="role.name"  name="name" />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="tag.description"  name="description" />
+                    <b-form-textarea v-model="role.description"  name="description" />
                 </b-form-group>
-                <b-form-group label="Categoria">
-                    <b-form-select v-model="tag.category" :options="categorias" />
+                <b-form-group label="Permissões">
+                    <b-form-select v-model="role.permissions" :options="permissions" multiple
+                        :select-size="12" />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-create')">CANCELAR</b-button>
@@ -25,17 +26,18 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-edit" title="EDITAR TAG" hide-footer>
+        <b-modal ref="form-edit" title="EDITAR CARGO" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="tag.name"  name="name" />
+                    <b-form-input v-model="role.name"  name="name" />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="tag.description"  name="description" />
+                    <b-form-textarea v-model="role.description"  name="description" />
                 </b-form-group>
-                <b-form-group label="Categoria">
-                    <b-form-select v-model="tag.category" :options="categorias" />
+                <b-form-group label="Permissões">
+                    <b-form-select v-model="role.permissions" :options="permissions" multiple
+                        :select-size="12" />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-edit')">CANCELAR</b-button>
@@ -44,8 +46,8 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-delete" title="DELETAR TAG" hide-footer>
-            <p>Tem certeza que deseja deletar a tag <i>{{ tag.name }}</i>?</p>
+        <b-modal ref="form-delete" title="DELETAR CARGO" hide-footer>
+            <p>Tem certeza que deseja deletar o cargo <i>{{ role.name }}</i>?</p>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
@@ -68,7 +70,7 @@ export default {
     middleware: 'auth',
 
     async asyncData({ store }) {
-        await store.dispatch('tags/fetchTags')
+        await store.dispatch('roles/fetchRoles')
     },
 
     data() {
@@ -76,17 +78,14 @@ export default {
             busy: false,
             password: "",
             errors: [],
-            tag: {},
+            role : {},
             options: {
                 lang: 'pt-br',
+                sortingMode: 'single',
                 columns: [
                     {
                         key: 'name',
                         title: 'Nome',
-                    },
-                    {
-                        key: 'category',
-                        title: 'Categoria',
                     },
                     {
                         title: "Ações",
@@ -100,17 +99,17 @@ export default {
     },
 
     computed: {
-        tags() {
-            return this.$store.state.tags.tags
+        roles() {
+            return this.$store.state.roles.roles
         },
-        categorias() {
-            return this.$store.state.tags.categorias
+        permissions() {
+            return this.$store.state.roles.permissions
         },
     },
 
     methods: {
         showCreateForm(){
-            this.tag = { name: "", description: "", category: ""}
+            this.role = { name: "", description: "", permissions: [] }
             this.$refs['form-create'].show()
         },
         hide(modalRef) {
@@ -124,11 +123,11 @@ export default {
             switch (action)
             {
                 case "edit":
-                    this.tag = {...data}
+                    this.role = {...data}
                     this.$refs['form-edit'].show()
                     break;
                 case "delete":
-                    this.tag = {...data}
+                    this.role = {...data}
                     this.$refs['form-delete'].show()
                     break;
             }
@@ -137,16 +136,16 @@ export default {
             if (this.busy) return
             this.busy = true
 
-            let data = this.tag
+            let data = this.role
             switch (action) {
                 case "create":
-                    action = 'tags/createTag'
+                    action = 'roles/createRole'
                     break;
                 case "edit":
-                    action = 'tags/updateTag'
+                    action = 'roles/updateRole'
                     break;
                 case "delete":
-                    action = 'tags/deleteTag'
+                    action = 'roles/deleteRole'
                     data = {...data, password: this.password }
                     break;
             }
@@ -163,7 +162,6 @@ export default {
                 })
                 .finally(() => {
                     this.busy = false
-                    this.password = ""
                 })
         },
         hideErrors() {
