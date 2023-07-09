@@ -44,8 +44,10 @@ ul {
 .nowrap {
     white-space: nowrap;
 }
-.w-min {
+
+.wmin {
     width: 1px;
+    text-align: center;
 }
 
 /* form */

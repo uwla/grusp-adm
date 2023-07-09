@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import DataTable from '@andresouzaabreu/vue-data-table'
+import VueDataTable from '@uwlajs/vue-data-table'
+import '@uwlajs/vue-data-table/dist/VueDataTable.css'
 
-Vue.component('VueDataTable', DataTable);
-
+Vue.component('VueDataTable', VueDataTable);
