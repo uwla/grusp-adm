@@ -117,9 +117,10 @@ export default {
 
     methods: {
         showCreateForm(){
-            this.showSuccess = false
-            this.role = { name: "", description: "", permissions: [] }
-            this.$refs['form-create'].show()
+            this.showForm({
+                action: 'create',
+                data: { name: "", description: "", category: "" }
+            })
         },
         hide(modalRef) {
             this.$refs[modalRef].hide()
@@ -128,19 +129,10 @@ export default {
         },
         showForm(payload) {
             let { action, data } = payload
-            this.errors = []
             this.showSuccess = false
-            switch (action)
-            {
-                case "edit":
-                    this.role = {...data}
-                    this.$refs['form-edit'].show()
-                    break;
-                case "delete":
-                    this.role = {...data}
-                    this.$refs['form-delete'].show()
-                    break;
-            }
+            this.errors = []
+            this.role = {...data}
+            this.$refs['form-' + action].show()
         },
         submit(form) {
             if (this.busy) return
@@ -157,7 +149,7 @@ export default {
                     break;
                 case "delete":
                     action = 'roles/deleteRole'
-                    data = {...data, password: this.password }
+                    data.password = this.password
                     break;
             }
 
@@ -183,7 +175,7 @@ export default {
             this.errors = []
         },
         hideSuccess() {
-            this.success = false
+            this.showSuccess = false
         }
     },
 }

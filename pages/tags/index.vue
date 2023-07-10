@@ -8,6 +8,9 @@
 
         <b-modal ref="form-create" title="CRIAR TAG" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
+             <message-success :show="showSuccess" @hide="hideSuccess()">
+                TAG CRIADA!
+            </message-success>
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
                     <b-form-input v-model="tag.name"  name="name" />
@@ -27,6 +30,9 @@
 
         <b-modal ref="form-edit" title="EDITAR TAG" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
+             <message-success :show="showSuccess" @hide="hideSuccess()">
+                TAG ATUALIZADA!
+            </message-success>
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
                     <b-form-input v-model="tag.name"  name="name" />
@@ -47,6 +53,9 @@
         <b-modal ref="form-delete" title="DELETAR TAG" hide-footer>
             <p>Tem certeza que deseja deletar a tag <i>{{ tag.name }}</i>?</p>
             <message-errors :errors="errors" @hide="hideErrors()" />
+            <message-success :show="showSuccess" @hide="hideSuccess()">
+                TAG DELETADA!
+            </message-success>
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
                     <b-form-input type="password" v-model="password"  name="password" />
@@ -74,6 +83,7 @@ export default {
     data() {
         return {
             busy: false,
+            showSuccess: false,
             password: "",
             errors: [],
             tag: {},
@@ -110,8 +120,10 @@ export default {
 
     methods: {
         showCreateForm(){
-            this.tag = { name: "", description: "", category: ""}
-            this.$refs['form-create'].show()
+            this.showForm({
+                action: 'create',
+                data: { name: "", description: "", category: "" }
+            })
         },
         hide(modalRef) {
             this.$refs[modalRef].hide()
@@ -120,25 +132,18 @@ export default {
         },
         showForm(payload) {
             let { action, data } = payload
+            this.showSuccess = false
             this.errors = []
-            switch (action)
-            {
-                case "edit":
-                    this.tag = {...data}
-                    this.$refs['form-edit'].show()
-                    break;
-                case "delete":
-                    this.tag = {...data}
-                    this.$refs['form-delete'].show()
-                    break;
-            }
+            this.tag = {...data}
+            this.$refs['form-' + action].show()
         },
-        submit(action) {
+        submit(form) {
             if (this.busy) return
             this.busy = true
 
+            let action
             let data = this.tag
-            switch (action) {
+            switch (form) {
                 case "create":
                     action = 'tags/createTag'
                     break;
@@ -151,7 +156,11 @@ export default {
                     break;
             }
 
-            this.$store.dispatch(action, data)
+            this.$store.dispatch(action, data).
+                then(() => {
+                    this.showSuccess = true
+                    setTimeout(() => this.hide('form-'+form), 1500)
+                })
                 .catch(exception => {
                     const response = exception.response
                     const errorObj = response.data.errors
@@ -168,6 +177,9 @@ export default {
         },
         hideErrors() {
             this.errors = []
+        },
+        hideSuccess() {
+            this.showSuccess = false
         }
     },
 }
