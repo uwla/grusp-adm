@@ -24,7 +24,9 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        '~/plugins/vue-data-table.js'
+        '~/plugins/vue-data-table.js',
+        '~/plugins/vue-anka-cropper.js',
+        '~/plugins/vue-multiselect.js',
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components

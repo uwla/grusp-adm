@@ -16,12 +16,14 @@
     "dependencies": {
         "@nuxtjs/auth-next": "5.0.0-1667386184.dfbbb54",
         "@nuxtjs/axios": "^5.13.6",
-        "@uwlajs/vue-data-table": "^1.1.1",
+        "@uwlajs/vue-data-table": "^1.1.2",
         "bootstrap": "^4.6.2",
         "bootstrap-vue": "^2.22.0",
         "core-js": "^3.25.3",
         "nuxt": "^2.15.8",
         "vue": "^2.7.10",
+        "vue-anka-cropper": "^1.1.0",
+        "vue-multiselect": "^2.1.7",
         "vue-server-renderer": "^2.7.10",
         "vue-template-compiler": "^2.7.10"
     },
