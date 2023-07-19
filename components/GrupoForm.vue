@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- ERROR MESSAGE -->
-        <message-errors :errors="errors" @hide="hideErrors()"/>
+        <message-errors :errors="errors" @hide="hideErrors()" />
 
         <!-- SUCCESS MESSAGE -->
         <message-success :show="showSuccess" @hide="hideSuccess()">
@@ -11,10 +11,10 @@
         <!-- FORM -->
         <form class="form" @submit.prevent="nothing()">
             <b-form-group label="Título" label-for="titulo">
-                <b-form-input type="text" v-model="titulo" id="titulo"/>
+                <b-form-input type="text" v-model="titulo" id="titulo" />
             </b-form-group>
             <b-form-group label="Descrição" label-for="descricao">
-                <b-form-textarea v-model="descricao" id="descricao" rows="8"/>
+                <b-form-textarea v-model="descricao" id="descricao" rows="8" />
             </b-form-group>
 
             <b-form-group label="Imagem Principal">
@@ -22,50 +22,51 @@
                     <img :src="imgURI" alt="">
                     <p class="text-center">A imagem acima será a imagem do grupo</p>
                 </div>
-                <vue-anka-cropper :options="cropperOptions" @cropper-saved="updateImg"/>
+                <vue-anka-cropper :options="cropperOptions" @cropper-saved="updateImg" />
             </b-form-group>
 
             <b-form-group label="Fotos do grupo (adicionar fotos)" label-for="images">
-                <b-form-file v-model="images"  id="images" accept=".jpg" multiple/>
+                <b-form-file v-model="images" id="images" accept=".jpg" multiple />
             </b-form-group>
 
-            <b-form-group v-if="imagesCurrent.length > 0"
-                label="Fotos atuais do grupo (selecione para remover)">
+            <b-form-group v-if="imagesCurrent.length > 0" label="Fotos atuais do grupo (selecione para remover)">
                 <b-form-checkbox-group v-model="imagesToDel">
-                    <b-form-checkbox v-for="img,i in imagesCurrent" :key="i" :value="img.id">
+                    <b-form-checkbox v-for="img, i in imagesCurrent" :key="i" :value="img.id">
                         <img class="img-check" :src="img.url">
                     </b-form-checkbox>
                 </b-form-checkbox-group>
             </b-form-group>
 
             <b-form-group label="Informações de contato" label-for="contato">
-                <b-form-textarea v-model="contato" id="contato" rows="3"/>
+                <b-form-textarea v-model="contato" id="contato" rows="3" />
             </b-form-group>
             <b-form-group label="Informações de horários de encontro" label-for="horario">
-                <b-form-textarea v-model="horario" id="horario" rows="3"/>
+                <b-form-textarea v-model="horario" id="horario" rows="3" />
             </b-form-group>
             <b-form-group label="Informações do lugar de encontro" label-for="lugar">
-                <b-form-textarea v-model="lugar" id="lugar" rows="3"/>
+                <b-form-textarea v-model="lugar" id="lugar" rows="3" />
             </b-form-group>
             <b-form-group label="Informações sobre mensalidade" label-for="mensalidade">
-                <b-form-textarea v-model="mensalidade" id="mensalidade" rows="3"/>
+                <b-form-textarea v-model="mensalidade" id="mensalidade" rows="3" />
             </b-form-group>
             <b-form-group label="Informações sobre público alvo" label-for="publico">
-                <b-form-textarea v-model="publico" id="publico" rows="3"/>
+                <b-form-textarea v-model="publico" id="publico" rows="3" />
             </b-form-group>
             <b-form-group label="Links úteis (redes sociais, grupos de mensagem, site)" label-for="links">
-                <b-form-textarea v-model="links" id="links" rows="3"/>
+                <b-form-textarea v-model="links" id="links" rows="3" />
             </b-form-group>
 
             <b-form-group label="Categoria do grupo">
-                <multiselect v-bind="params" v-model="tags"/>
+                <multiselect v-bind="params" v-model="tags" />
             </b-form-group>
 
             <div class="form-buttons">
+               <b-button block variant="danger" @click="initializeValues()">
+                    RESETAR
+                </b-button>
                 <b-button block variant="success" @click="submitForm()">
                     ENVIAR
                 </b-button>
-                <b-button block variant="danger" type="reset">RESETAR</b-button>
             </div>
         </form>
     </div>
@@ -111,24 +112,28 @@ export default {
     },
 
     mounted() {
-        // initialize the values
-        this.titulo = this.grupo.titulo ?? ""
-        this.descricao = this.grupo.descricao ?? ""
-        this.contato = this.grupo.contato ?? ""
-        this.horario = this.grupo.horario ?? ""
-        this.links = this.grupo.links ?? ""
-        this.lugar = this.grupo.lugar ?? ""
-        this.mensalidade = this.grupo.mensalidade ?? ""
-        this.publico = this.grupo.publico ?? ""
-        this.tags = this.grupo.tags ?? []
-        this.imgURI = this.grupo.img ?? ""
-        this.imagesCurrent = this.grupo.images ?? []
+        this.initializeValues()
     },
 
     methods: {
         updateImg(payload) {
             this.img = payload.croppedFile
             this.imgURI = payload.croppedImageURI
+        },
+
+        initializeValues() {
+            this.titulo = this.grupo.titulo ?? ""
+            this.descricao = this.grupo.descricao ?? ""
+            this.contato = this.grupo.contato ?? ""
+            this.horario = this.grupo.horario ?? ""
+            this.links = this.grupo.links ?? ""
+            this.lugar = this.grupo.lugar ?? ""
+            this.mensalidade = this.grupo.mensalidade ?? ""
+            this.publico = this.grupo.publico ?? ""
+            this.tags = this.grupo.tags ?? []
+            this.imgURI = this.grupo.img ?? ""
+            this.imagesCurrent = this.grupo.images ?? []
+            this.imagesToDel = []
         },
 
         // don't do nothing
@@ -206,21 +211,22 @@ export default {
         method: String,
         successMessage: String,
     },
-
 }
 </script>
-
 <style type="text/css">
 .ankaCropper a {
     box-sizing: content-box;
 }
+
 .ankaCropper svg {
     vertical-align: unset;
 }
+
 .ankaCropper__saveButton {
     display: flex !important;
     align-items: center;
 }
+
 .form .img-check {
     width: 80px;
     margin: 5px;
