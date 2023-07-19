@@ -52,7 +52,7 @@ export const actions = {
         commit('setTags', tags)
     },
     async fetchGrupos({ commit }) {
-        const url = "/public/grupos"
+        const url = "/grupo"
         const grupos = (await this.$axios.get(url)).data
         commit('setGrupos', grupos)
     },

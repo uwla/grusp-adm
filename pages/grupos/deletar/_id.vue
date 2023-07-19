@@ -2,7 +2,7 @@
     <main class="w500">
         <h1>DELETAR GRUPO</h1>
         <b-link href="/meus-grupos">Voltar</b-link><br/><br/>
-        <p>Para ter certeza que deseja deeltar o grupo, digite sua senha</p>
+        <p>Para ter certeza que deseja deletar o grupo, digite sua senha:</p>
         <grupo-delete :grupo="grupo" />
     </main>
 </template>

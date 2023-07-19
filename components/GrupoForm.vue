@@ -102,7 +102,7 @@ export default {
     computed: {
         // these are the parameters for vue multiselect
         params() {
-            return this.$store.getters['grupo/multiselectParams']
+            return this.$store.getters['grupos/multiselectParams']
         },
 
         showErrors() {
@@ -132,7 +132,7 @@ export default {
         },
 
         // don't do nothing
-        // this is due to VueAnkaCropper plugin which is accidentally submiting
+        // this is due to VueAnkaCropper plugin which is accidentally submitting
         // the form even if the user does not click the SUBMIT button
         nothing() { },
 

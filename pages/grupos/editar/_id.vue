@@ -5,7 +5,6 @@
         <grupo-form v-bind="formParams"/>
     </main>
 </template>
-
 <script>
 export default {
     middleware: 'auth',

@@ -56,7 +56,7 @@ export default {
                     this.hideErrors()
                     this.showSuccess = true
                     this.password = ""
-                    setTimeout(() => this.$router.push('/meus-grupos'), 1500)
+                    setTimeout(() => this.$router.push('/grupos'), 1500)
                 })
                 .catch(e => {
                     this.handleErrors(e.response.data.errors)
