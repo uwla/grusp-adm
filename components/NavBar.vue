@@ -3,8 +3,12 @@
         <b-navbar-nav align="end">
             <b-nav-item href="/">Home</b-nav-item>
             <b-nav-item-dropdown text="Conta" right>
-                <b-dropdown-item v-if="isGuest" href="/conta/entrar">Entrar</b-dropdown-item>
-                <b-dropdown-item v-if="isUser"  href="/conta/sair">Sair</b-dropdown-item>
+                <b-dropdown-item v-if="isGuest" href="/conta/entrar">
+                    Entrar
+                </b-dropdown-item>
+                <b-dropdown-item v-if="isUser" href="/conta/sair">
+                    Sair
+                </b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item-dropdown v-if="isUser" text="Menu" right>
                 <b-dropdown-item href="/tags">Tags</b-dropdown-item>
@@ -25,7 +29,7 @@ export default {
         isUser() {
             return this.$auth.loggedIn
         },
-    }
+    },
 }
 </script>
 

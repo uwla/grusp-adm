@@ -10,37 +10,34 @@
 
         <form class="form" @submit.prevent="register()">
             <b-form-group label="Nome" label-for="name">
-                <b-form-input type="text" v-model="f.name" id="name"/>
+                <b-form-input type="text" v-model="f.name" id="name" />
             </b-form-group>
             <b-form-group label="Email" label-for="email">
-                <b-form-input type="text" v-model="f.email" id="email"/>
+                <b-form-input type="email" v-model="f.email" id="email" />
             </b-form-group>
-            <b-form-group label="Senha" label-for="passsword">
-                <b-form-input type="password" v-model="f.password" id="password"/>
+            <b-form-group label="Senha" label-for="password">
+                <b-form-input type="password" v-model="f.password" id="password" />
             </b-form-group>
-            <b-form-group label="Confirmação da senha" label-for="passsword_confirmation">
+            <b-form-group label="Confirmação da senha" label-for="password_confirmation">
                 <b-form-input type="password" v-model="f.password_confirmation" id="password_confirmation"/>
             </b-form-group>
-            <b-button block variant="success" type="submit">
-                REGISTRAR
-            </b-button>
+            <b-button block variant="success" type="submit">REGISTRAR</b-button>
         </form>
     </main>
 </template>
-
 <script>
 export default {
     data() {
         const data = {
             f: {
-                name: "",
-                email: "",
-                password: "",
-                password_confirmation: "",
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: '',
             },
             errors: [],
             showSuccess: false,
-            message: "Conta criada com sucesso!",
+            message: 'Conta criada com sucesso!',
             formBusy: false,
         }
         return data
@@ -55,10 +52,11 @@ export default {
             this.hideSuccess()
 
             const axios = this.$axios
-            const url = "/auth/register"
+            const url = '/auth/register'
             const data = this.f
 
-            axios.post(url, data)
+            axios
+                .post(url, data)
                 .then(() => {
                     this.hideErrors()
                     this.showSuccessMsg()
@@ -67,9 +65,10 @@ export default {
                 .catch(e => {
                     let errors = e.response.data.errors
                     this.handleErrors(errors)
-                }).then(() => {
+                })
+                .then(() => {
                     this.formBusy = false
-                });
+                })
         },
 
         handleErrors(errors) {
@@ -93,9 +92,8 @@ export default {
         },
 
         clearForm() {
-            for (let field in this.f)
-                this.f[field] = ""
-        }
-    }
+            for (let field in this.f) this.f[field] = ''
+        },
+    },
 }
 </script>

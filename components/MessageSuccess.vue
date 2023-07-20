@@ -9,11 +9,11 @@ export default {
     methods: {
         hide() {
             this.$emit('hide')
-        }
+        },
     },
     props: {
         message: String,
         show: Boolean,
-    }
+    },
 }
 </script>

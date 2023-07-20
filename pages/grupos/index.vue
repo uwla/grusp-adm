@@ -2,26 +2,26 @@
     <main>
         <h1>GRUPOS</h1>
         <b-button variant="success" href="/grupos/criar">CRIAR GRUPO</b-button>
-        <br /><br />
+        <br />
+        <br />
         <vue-data-table v-bind="params" :data="grupos" />
     </main>
 </template>
 <script>
 const isearch = (a, b) => a.toLowerCase().includes(b.toLowerCase())
-const searchTag =  (data, search) => data.tags.some(t => isearch(t, search))
+const searchTag = (data, search) => data.tags.some(t => isearch(t, search))
 
 export default {
     middleware: 'auth',
 
     async asyncData({ store }) {
         await store.dispatch('grupos/fetchGrupos')
-
     },
 
     computed: {
         grupos() {
             return this.$store.state.grupos.grupos
-        }
+        },
     },
 
     data() {
@@ -35,7 +35,7 @@ export default {
                     },
                     {
                         title: 'Tags',
-                        component: "GrupoTableTags",
+                        component: 'GrupoTableTags',
                         searchable: true,
                         searchFunction: searchTag,
                     },
@@ -46,6 +46,6 @@ export default {
                 ],
             },
         }
-    }
+    },
 }
 </script>

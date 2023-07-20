@@ -18,9 +18,7 @@ export default {
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: [
-        '~/assets/css/main.css'
-    ],
+    css: ['~/assets/css/main.css'],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
@@ -39,11 +37,7 @@ export default {
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
-    modules: [
-        '@nuxtjs/axios',
-        '@nuxtjs/auth-next',
-        'bootstrap-vue/nuxt',
-    ],
+    modules: ['@nuxtjs/axios', '@nuxtjs/auth-next', 'bootstrap-vue/nuxt'],
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
@@ -55,7 +49,7 @@ export default {
 
         // Axios interceptor to add the bearer token to requests
         interceptors: {
-            request: (config) => {
+            request: config => {
                 const token = $auth.strategy.token.get()
                 if (token) {
                     config.headers.common['Authorization'] = `Bearer ${token}`
@@ -70,9 +64,9 @@ export default {
             local: {
                 provider: 'local',
                 endpoints: {
-                    login:  { url: '/auth/login_admin', method: 'post' },
+                    login: { url: '/auth/login_admin', method: 'post' },
                     logout: { url: '/auth/logout', method: 'post' },
-                    user:   { url: '/account/profile', method: 'get' }
+                    user: { url: '/account/profile', method: 'get' },
                 },
                 token: {
                     property: 'token',
@@ -82,13 +76,13 @@ export default {
                 user: {
                     property: false,
                     autoFetch: false,
-                }
+                },
             },
         },
         redirect: {
             login: '/conta/entrar',
             logout: '/conta/entrar',
-        }
+        },
     },
 
     bootstrapVue: {

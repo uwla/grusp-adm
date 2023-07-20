@@ -29,7 +29,8 @@
                 <b-form-file v-model="images" id="images" accept=".jpg" multiple />
             </b-form-group>
 
-            <b-form-group v-if="imagesCurrent.length > 0" label="Fotos atuais do grupo (selecione para remover)">
+            <b-form-group v-if="imagesCurrent.length > 0"
+                label="Fotos atuais do grupo (selecione para remover)">
                 <b-form-checkbox-group v-model="imagesToDel">
                     <b-form-checkbox v-for="img, i in imagesCurrent" :key="i" :value="img.id">
                         <img class="img-check" :src="img.url">
@@ -61,7 +62,7 @@
             </b-form-group>
 
             <div class="form-buttons">
-               <b-button block variant="danger" @click="initializeValues()">
+                <b-button block variant="danger" @click="initializeValues()">
                     RESETAR
                 </b-button>
                 <b-button block variant="success" @click="submitForm()">
@@ -76,14 +77,14 @@
 export default {
     data() {
         return {
-            titulo: "",
-            descricao: "",
-            contato: "",
-            mensalidade: "",
-            horario: "",
-            lugar: "",
-            publico: "",
-            links: "",
+            titulo: '',
+            descricao: '',
+            contato: '',
+            mensalidade: '',
+            horario: '',
+            lugar: '',
+            publico: '',
+            links: '',
             img: null,
             imgURI: null,
             images: [],
@@ -94,8 +95,8 @@ export default {
             showSuccess: false,
             cropperOptions: {
                 showPreview: false,
-                dropareaMessage: "Descarregue a imagem aqui",
-                selectButtonLabel: "Selecionar imagem",
+                dropareaMessage: 'Descarregue a imagem aqui',
+                selectButtonLabel: 'Selecionar imagem',
             },
         }
     },
@@ -108,7 +109,7 @@ export default {
 
         showErrors() {
             return this.errors.length > 0
-        }
+        },
     },
 
     mounted() {
@@ -122,16 +123,16 @@ export default {
         },
 
         initializeValues() {
-            this.titulo = this.grupo.titulo ?? ""
-            this.descricao = this.grupo.descricao ?? ""
-            this.contato = this.grupo.contato ?? ""
-            this.horario = this.grupo.horario ?? ""
-            this.links = this.grupo.links ?? ""
-            this.lugar = this.grupo.lugar ?? ""
-            this.mensalidade = this.grupo.mensalidade ?? ""
-            this.publico = this.grupo.publico ?? ""
+            this.titulo = this.grupo.titulo ?? ''
+            this.descricao = this.grupo.descricao ?? ''
+            this.contato = this.grupo.contato ?? ''
+            this.horario = this.grupo.horario ?? ''
+            this.links = this.grupo.links ?? ''
+            this.lugar = this.grupo.lugar ?? ''
+            this.mensalidade = this.grupo.mensalidade ?? ''
+            this.publico = this.grupo.publico ?? ''
             this.tags = this.grupo.tags ?? []
-            this.imgURI = this.grupo.img ?? ""
+            this.imgURI = this.grupo.img ?? ''
             this.imagesCurrent = this.grupo.images ?? []
             this.imagesToDel = []
         },
@@ -139,12 +140,12 @@ export default {
         // don't do nothing
         // this is due to VueAnkaCropper plugin which is submitting
         // the form even if the user does not click the SUBMIT button
-        nothing() { },
+        nothing() {},
 
         // actually submit the form
         submitForm() {
             const { contato, descricao, horario, images, imagesToDel, img, links,
-                lugar, mensalidade, method, publico, tags, titulo, url } = this
+                lugar, mensalidade, method, publico, tags, titulo, url, } = this
             const formData = new FormData()
 
             // append string fields

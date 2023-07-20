@@ -1,4 +1,4 @@
-import { createActions, createMutations } from "../utils"
+import { createActions, createMutations } from '../utils'
 
 export function state() {
     return {
@@ -9,19 +9,18 @@ export function state() {
 
 export const mutations = {
     // merge
-    ... createMutations('tags'),
+    ...createMutations('tags'),
 
     setCategorias(state, payload) {
         state.categorias = payload
-    }
+    },
 }
 
 export const actions = {
-    ... createActions('/tag'),
+    ...createActions('/tag'),
 
     async fetchCategorias({ commit }) {
         const categorias = (await this.$axios.get('/public/categorias')).data
         commit('setCategorias', categorias)
     },
 }
-

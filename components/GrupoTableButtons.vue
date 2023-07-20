@@ -23,10 +23,10 @@ export default {
     computed: {
         grupo() {
             return this.data
-        }
+        },
     },
     props: {
-        data: Object
-    }
+        data: Object,
+    },
 }
 </script>

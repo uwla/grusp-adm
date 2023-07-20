@@ -10,10 +10,9 @@ export const getters = {
 
     // options used by multiselect plugin
     multiselectOptions(state) {
-        const tags= state.tags
+        const tags = state.tags
         const options = []
-        for (let t in tags)
-            options.push({ 'label': t, 'values': tags[t] })
+        for (let t in tags) options.push({ label: t, values: tags[t] })
         return options
     },
 
@@ -28,12 +27,12 @@ export const getters = {
             'group-label': 'label',
             'group-select': true,
             'group-values': 'values',
-            'multiple': true,
-            'options': options,
-            'placeholder': 'selecionar tag',
+            multiple: true,
+            options: options,
+            placeholder: 'selecionar tag',
             'show-labels': false,
         }
-    }
+    },
 }
 
 export const mutations = {

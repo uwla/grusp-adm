@@ -2,18 +2,20 @@
     <main>
         <h1>USUÁRIOS</h1>
 
-        <b-button variant="success" @click="showCreateForm()">CRIAR USUÁRIO</b-button>
+        <b-button variant="success" @click="showCreateForm()">
+            CRIAR USUÁRIO
+        </b-button>
 
         <vue-data-table v-bind="options" :data="users" @userEvent="showForm" />
 
         <b-modal ref="form-create" title="CRIAR USUÁRIO" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
-             <message-success :show="showSuccess" @hide="hideSuccess()">
+            <message-success :show="showSuccess" @hide="hideSuccess()">
                 USUÁRIO CRIADO!
             </message-success>
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="user.name"  name="name" />
+                    <b-form-input v-model="user.name" name="name" />
                 </b-form-group>
                 <b-form-group label="Email" label-for="email">
                     <b-form-input v-model="user.email"  name="email" type="email"/>
@@ -25,30 +27,38 @@
                     <b-form-select v-model="user.roles" :options="roles" multiple />
                 </b-form-group>
                 <div class="text-right">
-                    <b-button variant="info" @click="hide('form-create')">CANCELAR</b-button>
-                    <b-button variant="success" @click="submit('create')">SALVAR</b-button>
+                    <b-button variant="info" @click="hide('form-create')">
+                        CANCELAR
+                    </b-button>
+                    <b-button variant="success" @click="submit('create')">
+                        SALVAR
+                    </b-button>
                 </div>
             </form>
         </b-modal>
 
         <b-modal ref="form-edit" title="EDITAR USUÁRIO" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
-             <message-success :show="showSuccess" @hide="hideSuccess()">
+            <message-success :show="showSuccess" @hide="hideSuccess()">
                 USUÁRIO ATUALIZADO!
             </message-success>
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="user.name"  name="name" />
+                    <b-form-input v-model="user.name" name="name" />
                 </b-form-group>
                 <b-form-group label="Email" label-for="email">
-                    <b-form-textarea v-model="user.email"  name="email" />
+                    <b-form-textarea v-model="user.email" name="email" />
                 </b-form-group>
                 <b-form-group label="Cargos">
                     <b-form-select v-model="user.roles" :options="roles" multiple />
                 </b-form-group>
                 <div class="text-right">
-                    <b-button variant="info" @click="hide('form-edit')">CANCELAR</b-button>
-                    <b-button variant="success" @click="submit('edit')">SALVAR</b-button>
+                    <b-button variant="info" @click="hide('form-edit')">
+                        CANCELAR
+                    </b-button>
+                    <b-button variant="success" @click="submit('edit')">
+                        SALVAR
+                    </b-button>
                 </div>
             </form>
         </b-modal>
@@ -64,16 +74,20 @@
                     <b-form-input type="password" v-model="password"  name="password" />
                 </b-form-group>
                 <div class="text-right">
-                    <b-button variant="info" @click="hide('form-delete')">CANCELAR</b-button>
-                    <b-button variant="danger" @click="submit('delete')">DELETAR</b-button>
+                    <b-button variant="info" @click="hide('form-delete')">
+                        CANCELAR
+                    </b-button>
+                    <b-button variant="danger" @click="submit('delete')">
+                        DELETAR
+                    </b-button>
                 </div>
             </form>
         </b-modal>
-
     </main>
 </template>
 <script>
 import { VdtActionButtons } from '@uwlajs/vue-data-table'
+import { parseResponseErrors } from '../../utils'
 
 export default {
     middleware: 'auth',
@@ -87,7 +101,7 @@ export default {
         return {
             busy: false,
             showSuccess: false,
-            password: "",
+            password: '',
             errors: [],
             user: {},
             options: {
@@ -98,13 +112,13 @@ export default {
                         title: 'Nome',
                     },
                     {
-                        title: "Ações",
-                        cssClass: "wmin",
+                        title: 'Ações',
+                        cssClass: 'wmin',
                         component: VdtActionButtons,
-                        componentProps: { actions: ['edit', 'delete'] }
-                    }
-                ]
-            }
+                        componentProps: { actions: ['edit', 'delete'] },
+                    },
+                ],
+            },
         }
     },
 
@@ -118,22 +132,22 @@ export default {
     },
 
     methods: {
-        showCreateForm(){
+        showCreateForm() {
             this.showForm({
                 action: 'create',
-                data: { name: "", email: "", password: "", roles: [] }
+                data: { name: '', email: '', password: '', roles: [] },
             })
         },
         hide(modalRef) {
             this.$refs[modalRef].hide()
             this.errors = []
-            this.password = ""
+            this.password = ''
         },
         showForm(payload) {
             let { action, data } = payload
             this.showSuccess = false
             this.errors = []
-            this.user = {...data}
+            this.user = { ...data }
             this.$refs['form-' + action].show()
         },
         submit(form) {
@@ -145,35 +159,30 @@ export default {
             let action
             let data = this.user
             switch (form) {
-                case "create":
+                case 'create':
                     action = 'users/create'
-                    break;
-                case "edit":
+                    break
+                case 'edit':
                     action = 'users/update'
-                    break;
-                case "delete":
+                    break
+                case 'delete':
                     action = 'users/delete'
-                    data = {...data, password: this.password }
-                    break;
+                    data = { ...data, password: this.password }
+                    break
             }
 
-            this.$store.dispatch(action, data)
+            this.$store
+                .dispatch(action, data)
                 .then(() => {
                     this.showSuccess = true
-                    setTimeout(() => this.hide('form-'+form), 1500)
+                    setTimeout(() => this.hide('form-' + form), 1500)
                 })
                 .catch(exception => {
-                    const response = exception.response
-                    const errorObj = response.data.errors
-                    const errors = []
-                    for (let field in errorObj)
-                        for (let err of errorObj[field])
-                            errors.push(err)
-                    this.errors = errors
+                    this.errors = parseResponseErrors(exception.response)
                 })
                 .finally(() => {
                     this.busy = false
-                    this.password = ""
+                    this.password = ''
                 })
         },
         hideErrors() {
@@ -181,7 +190,7 @@ export default {
         },
         hideSuccess() {
             this.showSuccess = false
-        }
+        },
     },
 }
 </script>

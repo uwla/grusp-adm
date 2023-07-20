@@ -2,7 +2,9 @@
     <main>
         <h1>CARGOS</h1>
 
-        <b-button variant="success" @click="showCreateForm()">CRIAR CARGO</b-button>
+        <b-button variant="success" @click="showCreateForm()">
+            CRIAR CARGO
+        </b-button>
 
         <vue-data-table v-bind="options" :data="roles" @userEvent="showForm" />
 
@@ -13,17 +15,22 @@
             <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="role.name"  name="name" />
+                    <b-form-input v-model="role.name" name="name" />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
                     <b-form-textarea v-model="role.description"  name="description" />
                 </b-form-group>
                 <b-form-group label="Permissões">
-                    <b-form-select v-model="role.permissions" multiple :options="permissions" :select-size="12" />
+                    <b-form-select v-model="role.permissions" multiple
+                        :options="permissions" :select-size="12" />
                 </b-form-group>
                 <div class="text-right">
-                    <b-button variant="info" @click="hide('form-create')">CANCELAR</b-button>
-                    <b-button variant="success" @click="submit('create')">SALVAR</b-button>
+                    <b-button variant="info" @click="hide('form-create')">
+                        CANCELAR
+                    </b-button>
+                    <b-button variant="success" @click="submit('create')">
+                        SALVAR
+                    </b-button>
                 </div>
             </form>
         </b-modal>
@@ -41,11 +48,16 @@
                     <b-form-textarea v-model="role.description"  name="description" />
                 </b-form-group>
                 <b-form-group label="Permissões">
-                    <b-form-select v-model="role.permissions" multiple :options="permissions" :select-size="12" />
+                    <b-form-select v-model="role.permissions" multiple
+                        :options="permissions" :select-size="12" />
                 </b-form-group>
                 <div class="text-right">
-                    <b-button variant="info" @click="hide('form-edit')">CANCELAR</b-button>
-                    <b-button variant="success" @click="submit('edit')">SALVAR</b-button>
+                    <b-button variant="info" @click="hide('form-edit')">
+                        CANCELAR
+                    </b-button>
+                    <b-button variant="success" @click="submit('edit')">
+                        SALVAR
+                    </b-button>
                 </div>
             </form>
         </b-modal>
@@ -61,17 +73,20 @@
                     <b-form-input type="password" v-model="password"  name="password" />
                 </b-form-group>
                 <div class="text-right">
-                    <b-button variant="info" @click="hide('form-delete')">CANCELAR</b-button>
-                    <b-button variant="danger" @click="submit('delete')">DELETAR</b-button>
+                    <b-button variant="info" @click="hide('form-delete')">
+                        CANCELAR
+                    </b-button>
+                    <b-button variant="danger" @click="submit('delete')">
+                        DELETAR
+                    </b-button>
                 </div>
             </form>
         </b-modal>
-
     </main>
 </template>
-
 <script>
 import { VdtActionButtons } from '@uwlajs/vue-data-table'
+import { parseResponseErrors } from '../../utils'
 
 export default {
     middleware: 'auth',
@@ -85,20 +100,20 @@ export default {
         return {
             busy: false,
             showSuccess: false,
-            password: "",
+            password: '',
             errors: [],
-            role : {},
+            role: {},
             options: {
                 lang: 'pt-br',
                 sortingMode: 'single',
                 columns: [
                     {
                         key: 'name',
-                        title: 'Nome',
+                        title: 'Nome'
                     },
                     {
-                        title: "Ações",
-                        cssClass: "wmin",
+                        title: 'Ações',
+                        cssClass: 'wmin',
                         component: VdtActionButtons,
                         componentProps: { actions: ['edit', 'delete'] }
                     }
@@ -113,26 +128,26 @@ export default {
         },
         permissions() {
             return this.$store.state.permissions.permissions
-        },
+        }
     },
 
     methods: {
-        showCreateForm(){
+        showCreateForm() {
             this.showForm({
                 action: 'create',
-                data: { name: "", description: "", permissions: [] }
+                data: { name: '', description: '', permissions: [] }
             })
         },
         hide(modalRef) {
             this.$refs[modalRef].hide()
             this.errors = []
-            this.password = ""
+            this.password = ''
         },
         showForm(payload) {
             let { action, data } = payload
             this.showSuccess = false
             this.errors = []
-            this.role = {...data}
+            this.role = { ...data }
             this.$refs['form-' + action].show()
         },
         submit(form) {
@@ -144,35 +159,29 @@ export default {
             let action
             let data = this.role
             switch (form) {
-                case "create":
+                case 'create':
                     action = 'roles/create'
-                    break;
-                case "edit":
+                    break
+                case 'edit':
                     action = 'roles/update'
-                    break;
-                case "delete":
+                    break
+                case 'delete':
                     action = 'roles/delete'
                     data.password = this.password
-                    break;
+                    break
             }
 
             this.$store.dispatch(action, data)
                 .then(() => {
                     this.showSuccess = true
-                    setTimeout(() => this.hide("form-" + form), 1500)
+                    setTimeout(() => this.hide('form-' + form), 1500)
                 })
                 .catch(exception => {
-                    const response = exception.response
-                    const errorObj = response.data.errors
-                    const errors = []
-                    for (let field in errorObj)
-                        for (let err of errorObj[field])
-                            errors.push(err)
-                    this.errors = errors
+                    this.errors = parseResponseErrors(exception.response)
                 })
                 .finally(() => {
                     this.busy = false
-                    this.password = ""
+                    this.password = ''
                 })
         },
         hideErrors() {
@@ -181,6 +190,6 @@ export default {
         hideSuccess() {
             this.showSuccess = false
         }
-    },
+    }
 }
 </script>

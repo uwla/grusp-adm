@@ -12,10 +12,10 @@ export default {
     methods: {
         click(tag) {
             this.$emit('tagClicked', tag)
-        }
+        },
     },
     props: {
-        tags: Array
+        tags: Array,
     },
 }
 </script>

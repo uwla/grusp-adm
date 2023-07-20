@@ -32,19 +32,19 @@
             <p>{{ grupo.lugar }}</p>
         </div>
 
-       <!-- mensalidade -->
+        <!-- mensalidade -->
         <div v-if="grupo.mensalidade">
             <b>Informações sobre mensalidade:</b>
             <p>{{ grupo.mensalidade }}</p>
         </div>
 
-       <!-- público alvo -->
+        <!-- público alvo -->
         <div v-if="grupo.publico">
             <b>Informações sobre público alvo:</b>
             <p>{{ grupo.publico }}</p>
         </div>
 
-       <!-- links úteis -->
+        <!-- links úteis -->
         <div v-if="grupo.links">
             <b>Links úteis:</b>
             <p>{{ grupo.links }}</p>
@@ -55,10 +55,9 @@
             <b>Fotos do grupo:</b>
             <b-carousel :interval="0" controls indicators background="black">
                 <b-carousel-slide v-for="image,i in grupo.images" :key="i"
-                    :img-src="image.url"
-                    img-height="250px" />
+                    :img-src="image.url" img-height="250px" />
             </b-carousel>
-            <br/>
+            <br />
         </div>
 
         <!-- tags -->
@@ -72,8 +71,8 @@
 <script>
 export default {
     props: {
-        grupo: Object
-    }
+        grupo: Object,
+    },
 }
 </script>
 

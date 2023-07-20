@@ -1,7 +1,15 @@
+export function parseResponseErrors(response) {
+    const errorObj = response.data.errors
+    const errors = []
+    for (let field in errorObj)
+        for (let err of errorObj[field]) errors.push(err)
+    return errors
+}
+
 export function createState(modelName) {
-    return function() {
+    return function () {
         return {
-            [modelName]: []
+            [modelName]: [],
         }
     }
 }
@@ -20,7 +28,7 @@ export function createMutations(modelName) {
         },
         deleteModel(state, model) {
             state[modelName] = state[modelName].filter(m => m.id != model.id)
-        }
+        },
     }
 }
 
@@ -48,7 +56,8 @@ export function createActions(endpoint) {
         async delete({ commit }, payload) {
             let data = { ...payload }
             let { id } = data
-            data = (await this.$axios.delete(`${endpoint}/${id}`, { data })).data
+            data = (await this.$axios.delete(`${endpoint}/${id}`, { data }))
+                .data
             commit('deleteModel', data)
         },
     }

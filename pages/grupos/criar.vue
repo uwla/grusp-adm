@@ -1,8 +1,10 @@
 <template>
     <main class="w700" style="min-height: 120vh">
         <h1>REGISTRAR GRUPO</h1>
-        <b-link href="/meus-grupos">Voltar</b-link><br/><br/>
-        <grupo-form v-bind="formParams"/>
+        <b-link href="/meus-grupos">Voltar</b-link>
+        <br />
+        <br />
+        <grupo-form v-bind="formParams" />
     </main>
 </template>
 
@@ -18,10 +20,10 @@ export default {
         return {
             formParams: {
                 grupo: {},
-                method: "post",
-                successMessage: "Grupo criado!",
-                url: "/grupo",
-            }
+                method: 'post',
+                successMessage: 'Grupo criado!',
+                url: '/grupo',
+            },
         }
     },
 }

@@ -1,4 +1,4 @@
-import { createMutations, createActions, createState } from "../utils"
+import { createMutations, createActions, createState } from '../utils'
 
 export const state = createState('users')
 export const mutations = createMutations('users')
