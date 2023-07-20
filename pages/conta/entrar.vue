@@ -49,7 +49,6 @@ export default {
             this.formBusy = true
             const { password, email } = this
             const auth = this.$auth
-            // auth.loginWith('laravelSanctum', {
             auth.loginWith('local', {
                     data: { password, email }
                 })

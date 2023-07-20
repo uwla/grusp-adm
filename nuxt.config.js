@@ -52,6 +52,17 @@ export default {
 
     axios: {
         credentials: true,
+
+        // Axios interceptor to add the bearer token to requests
+        interceptors: {
+            request: (config) => {
+                const token = $auth.strategy.token.get()
+                if (token) {
+                    config.headers.common['Authorization'] = `Bearer ${token}`
+                }
+                return config
+            },
+        },
     },
 
     auth: {

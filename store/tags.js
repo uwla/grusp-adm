@@ -27,51 +27,29 @@ export const mutations = {
 export const actions = {
     async createTag({ commit }, payload) {
         let data = {...payload}
-
-        // request headers
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        data = (await this.$axios.post(`/tag`, data, { headers })).data
+        data = (await this.$axios.post('/tag', data)).data
         commit('addTag', data)
     },
 
     async fetchTags({ commit }) {
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        // fetch tags
-        const tags = (await this.$axios.get('/tag', { headers })).data
+        const tags = (await this.$axios.get('/tag')).data
         commit('setTags', tags)
-
-        // fetch categories
-        const categorias = (await this.$axios.get('/public/categorias', { headers })).data
+        const categorias = (await this.$axios.get('/public/categorias')).data
         commit('setCategorias', categorias)
     },
 
     async updateTag({ commit }, payload) {
         let data = {...payload}
-
-        // add field
+        let { id } = data
         data._method = "PUT"
-
-        // request headers
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        data = (await this.$axios.post(`/tag/${data.id}`, data, { headers })).data
+        data = (await this.$axios.post(`/tag/${id}`, data)).data
         commit('updateTag', data)
     },
 
-
     async deleteTag({ commit }, payload) {
         let data = {...payload}
-
-        // request headers
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        await this.$axios.delete(`/tag/${data.id}`, { headers, data })
+        let { id } = data
+        data = (await this.$axios.delete(`/tag/${id}`, { data })).data
         commit('deleteTag', data)
     },
 }

@@ -23,47 +23,27 @@ export const mutations = {
 export const actions = {
     async createUser({ commit }, payload) {
         let data = {...payload}
-
-        // request headers
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        data = (await this.$axios.post(`/user`, data, { headers })).data
+        data = (await this.$axios.post('/user', data)).data
         commit('addUser', data)
     },
 
     async fetchUsers({ commit }) {
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        // fetch users
-        const users = (await this.$axios.get('/user', { headers })).data
+        const users = (await this.$axios.get('/user')).data
         commit('setUsers', users)
     },
 
     async updateUser({ commit }, payload) {
         let data = {...payload}
-
-        // add field
+        let { id } = data
         data._method = "PUT"
-
-        // request headers
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        data = (await this.$axios.post(`/user/${data.id}`, data, { headers })).data
+        data = (await this.$axios.post(`/user/${id}`, data)).data
         commit('updateUser', data)
     },
 
-
     async deleteUser({ commit }, payload) {
-        const data = {...payload}
-
-        // request headers
-        const token = this.$auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-
-        await this.$axios.delete(`/user/${data.id}`, { headers, data })
+        let data = {...payload}
+        let { id } = data
+        data = (await this.$axios.delete(`/user/${id}`, { data })).data
         commit('deleteUser', data)
     },
 }

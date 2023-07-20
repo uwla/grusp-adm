@@ -1,9 +1,7 @@
 <template>
     <main>
-        <h1>MAIN CONTENT</h1>
-        bem vindo {{ user.name }}, <br/>
-        seu email eh {{ user.email }} <br/>
-        seus cargos são: {{ user.roles }}
+        <h1>GRUSP ADM</h1>
+        <p>Bem vindo {{ user.name }}</p>
     </main>
 </template>
 
@@ -13,11 +11,6 @@ export default {
     computed: {
         user() {
             return this.$auth.user
-        }
-    },
-    methods: {
-        foo() {
-            console.log(this.$auth.strategy, this.$auth.strategy.token)
         }
     },
 }

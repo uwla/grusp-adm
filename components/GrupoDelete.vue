@@ -42,16 +42,12 @@ export default {
             this.formBusy = true
 
             const url = `/grupo/${this.grupo.id}`;
-            const token = this.$auth.strategy.token.get()
-            const headers = {
-                'Authorization': token,
-            }
             const data = {
                 password: this.password,
                 _method: "delete"
             }
 
-            this.$axios.post(url, data, { headers })
+            this.$axios.post(url, data)
                 .then(res => {
                     this.hideErrors()
                     this.showSuccess = true

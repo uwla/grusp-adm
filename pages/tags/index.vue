@@ -140,6 +140,8 @@ export default {
         submit(form) {
             if (this.busy) return
             this.busy = true
+            this.errors = []
+            this.showSuccess = false
 
             let action
             let data = this.tag

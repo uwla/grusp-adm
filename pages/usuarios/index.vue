@@ -16,7 +16,10 @@
                     <b-form-input v-model="user.name"  name="name" />
                 </b-form-group>
                 <b-form-group label="Email" label-for="email">
-                    <b-form-textarea v-model="user.email"  name="email" type="email"/>
+                    <b-form-input v-model="user.email"  name="email" type="email"/>
+                </b-form-group>
+                <b-form-group label="Senha" label-for="password">
+                    <b-form-input v-model="user.password"  name="password" type="password"/>
                 </b-form-group>
                 <b-form-group label="Cargos">
                     <b-form-select v-model="user.roles" :options="roles" multiple />
@@ -118,7 +121,7 @@ export default {
         showCreateForm(){
             this.showForm({
                 action: 'create',
-                data: { name: "", description: "", category: "" }
+                data: { name: "", email: "", password: "", roles: [] }
             })
         },
         hide(modalRef) {
@@ -136,6 +139,8 @@ export default {
         submit(form) {
             if (this.busy) return
             this.busy = true
+            this.errors = []
+            this.showSuccess = false
 
             let action
             let data = this.user

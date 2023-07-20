@@ -13,12 +13,15 @@ const searchTag =  (data, search) => data.tags.some(t => isearch(t, search))
 export default {
     middleware: 'auth',
 
-    async asyncData({ $auth, $axios }) {
-        const url = '/grupo'
-        const token = $auth.strategy.token.get()
-        const headers = { Authorization: token }
-        const grupos = (await $axios.get(url, { headers })).data
-        return { grupos }
+    async asyncData({ store }) {
+        await store.dispatch('grupos/fetchGrupos')
+
+    },
+
+    computed: {
+        grupos() {
+            return this.$store.state.grupos.grupos
+        }
     },
 
     data() {

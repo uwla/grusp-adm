@@ -7,12 +7,10 @@
 export default {
     middleware: 'auth',
 
-    async asyncData({ $auth, $axios, params, store }) {
+    async asyncData({ $axios, params }) {
         const id = params.id
         const url = `/grupo/${id}`
-        const token = $auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-        const grupo = (await $axios.get(url, { headers }) ).data
+        const grupo = (await $axios.get(url)).data
         return { grupo }
     },
 }

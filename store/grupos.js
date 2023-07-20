@@ -47,12 +47,12 @@ export const mutations = {
 
 export const actions = {
     async fetchTags({ commit }) {
-        const url = "/public/tags"
+        const url = '/public/tags'
         const tags = (await this.$axios.get(url)).data
         commit('setTags', tags)
     },
     async fetchGrupos({ commit }) {
-        const url = "/grupo"
+        const url = '/grupo'
         const grupos = (await this.$axios.get(url)).data
         commit('setGrupos', grupos)
     },

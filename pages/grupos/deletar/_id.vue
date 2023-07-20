@@ -11,18 +11,10 @@
 export default {
     middleware: 'auth',
 
-    async asyncData({ $auth, $axios, params, store }) {
-        // fetch tags for creating a grupo
-        // these tags will be stored in our vuex store
-        await store.dispatch('grupo/fetchTags')
-
-        // fetch the Grupo
+    async asyncData({ $axios, params }) {
         const id = params.id
         const url = `/grupo/${id}`
-        const token = $auth.strategy.token.get()
-        const headers = { 'Authorization' : token }
-        const grupo = (await $axios.get(url, { headers }) ).data
-
+        const grupo = (await $axios.get(url)).data
         return { grupo }
     },
 }

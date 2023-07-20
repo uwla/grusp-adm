@@ -137,14 +137,14 @@ export default {
         },
 
         // don't do nothing
-        // this is due to VueAnkaCropper plugin which is accidentally submitting
+        // this is due to VueAnkaCropper plugin which is submitting
         // the form even if the user does not click the SUBMIT button
         nothing() { },
 
         // actually submit the form
         submitForm() {
-            const { contato, descricao, horario, images, imagesToDel, img, links, lugar,
-                mensalidade, method, publico, tags, titulo, url } = this
+            const { contato, descricao, horario, images, imagesToDel, img, links,
+                lugar, mensalidade, method, publico, tags, titulo, url } = this
             const formData = new FormData()
 
             // append string fields
@@ -171,11 +171,7 @@ export default {
             tags.forEach(t => formData.append('tags[]', t))
 
             // request headers
-            const token = this.$auth.strategy.token.get()
-            const headers = {
-                'Authorization': token,
-                'Content-Type': 'multipart/form-data',
-            }
+            const headers = { 'Content-Type': 'multipart/form-data' }
 
             this.$axios.post(url, formData, { headers })
                 .then(res => {
