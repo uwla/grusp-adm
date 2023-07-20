@@ -77,7 +77,8 @@ export default {
     middleware: 'auth',
 
     async asyncData({ store }) {
-        await store.dispatch('roles/fetchRoles')
+        await store.dispatch('roles/fetch')
+        await store.dispatch('permissions/fetch')
     },
 
     data() {
@@ -111,7 +112,7 @@ export default {
             return this.$store.state.roles.roles
         },
         permissions() {
-            return this.$store.state.roles.permissions
+            return this.$store.state.permissions.permissions
         },
     },
 
@@ -119,7 +120,7 @@ export default {
         showCreateForm(){
             this.showForm({
                 action: 'create',
-                data: { name: "", description: "", category: "" }
+                data: { name: "", description: "", permissions: [] }
             })
         },
         hide(modalRef) {
@@ -144,13 +145,13 @@ export default {
             let data = this.role
             switch (form) {
                 case "create":
-                    action = 'roles/createRole'
+                    action = 'roles/create'
                     break;
                 case "edit":
-                    action = 'roles/updateRole'
+                    action = 'roles/update'
                     break;
                 case "delete":
-                    action = 'roles/deleteRole'
+                    action = 'roles/delete'
                     data.password = this.password
                     break;
             }

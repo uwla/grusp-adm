@@ -77,7 +77,8 @@ export default {
     middleware: 'auth',
 
     async asyncData({ store }) {
-        await store.dispatch('tags/fetchTags')
+        await store.dispatch('tags/fetch')
+        await store.dispatch('tags/fetchCategorias')
     },
 
     data() {
@@ -147,13 +148,13 @@ export default {
             let data = this.tag
             switch (form) {
                 case "create":
-                    action = 'tags/createTag'
+                    action = 'tags/create'
                     break;
                 case "edit":
-                    action = 'tags/updateTag'
+                    action = 'tags/update'
                     break;
                 case "delete":
-                    action = 'tags/deleteTag'
+                    action = 'tags/delete'
                     data = {...data, password: this.password }
                     break;
             }

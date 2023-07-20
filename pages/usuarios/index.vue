@@ -80,7 +80,7 @@ export default {
 
     async asyncData({ store }) {
         await store.dispatch('roles/fetchRoles')
-        await store.dispatch('users/fetchUsers')
+        await store.dispatch('users/fetch')
     },
 
     data() {
@@ -146,13 +146,13 @@ export default {
             let data = this.user
             switch (form) {
                 case "create":
-                    action = 'users/createUser'
+                    action = 'users/create'
                     break;
                 case "edit":
-                    action = 'users/updateUser'
+                    action = 'users/update'
                     break;
                 case "delete":
-                    action = 'users/deleteUser'
+                    action = 'users/delete'
                     data = {...data, password: this.password }
                     break;
             }
