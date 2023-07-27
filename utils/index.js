@@ -24,7 +24,7 @@ export function createMutations(modelName) {
         },
         updateModel(state, model) {
             const ind = state[modelName].findIndex(m => m.id == model.id)
-            state[modelName].splice(ind, 1, model)
+            if (ind >= 0) state[modelName].splice(ind, 1, model)
         },
         deleteModel(state, model) {
             state[modelName] = state[modelName].filter(m => m.id != model.id)
@@ -50,14 +50,13 @@ export function createActions(endpoint) {
             let { id } = data
             data._method = 'PUT'
             data = (await this.$axios.post(`${endpoint}/${id}`, data)).data
-            commit('updateModels', data)
+            commit('updateModel', data)
         },
 
         async delete({ commit }, payload) {
             let data = { ...payload }
             let { id } = data
-            data = (await this.$axios.delete(`${endpoint}/${id}`, { data }))
-                .data
+            await this.$axios.delete(`${endpoint}/${id}`, { data })
             commit('deleteModel', data)
         },
     }
