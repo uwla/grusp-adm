@@ -11,8 +11,9 @@
                 </b-dropdown-item>
             </b-nav-item-dropdown>
             <b-nav-item-dropdown v-if="isUser" text="Menu" right>
-                <b-dropdown-item href="/tags">Tags</b-dropdown-item>
                 <b-dropdown-item href="/grupos">Grupos</b-dropdown-item>
+                <b-dropdown-item href="/tags">Tags</b-dropdown-item>
+                <b-dropdown-item href="/categorias">Categorias</b-dropdown-item>
                 <b-dropdown-item href="/cargos">Cargos</b-dropdown-item>
                 <b-dropdown-item href="/usuarios">Usuários</b-dropdown-item>
             </b-nav-item-dropdown>
