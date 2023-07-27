@@ -1,30 +1,30 @@
 <template>
     <main>
-        <h1>USUÁRIOS</h1>
+        <h1>TAGS</h1>
 
         <b-button variant="success" @click="showCreateForm()">
-            CRIAR USUÁRIO
+            CRIAR TAG
         </b-button>
 
-        <vue-data-table v-bind="options" :data="users" @userEvent="showForm" />
+        <vue-data-table v-bind="options" :data="tags" @userEvent="showForm" />
 
-        <b-modal ref="form-create" title="CRIAR USUÁRIO" hide-footer>
+        <b-modal ref="form-create" title="CRIAR TAG" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <message-success :show="showSuccess" @hide="hideSuccess()">
-                USUÁRIO CRIADO!
+                TAG CRIADA!
             </message-success>
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="user.name" name="name" />
+                    <b-form-input v-model="tag.name" name="name" />
                 </b-form-group>
-                <b-form-group label="Email" label-for="email">
-                    <b-form-input v-model="user.email"  name="email" type="email"/>
+                <b-form-group label="Descrição (opcional)" label-for="description">
+                    <b-form-textarea v-model="tag.description"  name="description" />
                 </b-form-group>
-                <b-form-group label="Senha" label-for="password">
-                    <b-form-input v-model="user.password"  name="password" type="password"/>
-                </b-form-group>
-                <b-form-group label="Cargos">
-                    <b-form-select v-model="user.roles" :options="roles" multiple />
+                <b-form-group label="Categoria">
+                    <b-form-select
+                        v-model="tag.category"
+                        :options="categorias"
+                    />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-create')">
@@ -37,20 +37,23 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-edit" title="EDITAR USUÁRIO" hide-footer>
+        <b-modal ref="form-edit" title="EDITAR TAG" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <message-success :show="showSuccess" @hide="hideSuccess()">
-                USUÁRIO ATUALIZADO!
+                TAG ATUALIZADA!
             </message-success>
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="user.name" name="name" />
+                    <b-form-input v-model="tag.name" name="name" />
                 </b-form-group>
-                <b-form-group label="Email" label-for="email">
-                    <b-form-textarea v-model="user.email" name="email" />
+                <b-form-group label="Descrição (opcional)" label-for="description">
+                    <b-form-textarea v-model="tag.description"  name="description" />
                 </b-form-group>
-                <b-form-group label="Cargos">
-                    <b-form-select v-model="user.roles" :options="roles" multiple />
+                <b-form-group label="Categoria">
+                    <b-form-select
+                        v-model="tag.category"
+                        :options="categorias"
+                    />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-edit')">
@@ -63,11 +66,11 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-delete" title="DELETAR USUÁRIO" hide-footer>
-            <p>Tem certeza que deseja deletar o usuário <i>{{ user.name }}</i>?</p>
+        <b-modal ref="form-delete" title="DELETAR TAG" hide-footer>
+            <p>Tem certeza que deseja deletar a tag <i>{{ tag.name }}</i>?</p>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <message-success :show="showSuccess" @hide="hideSuccess()">
-                USUÁRIO DELETADO!
+                TAG DELETADA!
             </message-success>
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
@@ -85,16 +88,17 @@
         </b-modal>
     </main>
 </template>
+
 <script>
 import { VdtActionButtons } from '@uwlajs/vue-data-table'
-import { parseResponseErrors } from '../../utils'
+import { parseResponseErrors } from '../utils'
 
 export default {
     middleware: 'auth',
 
     async asyncData({ store }) {
-        await store.dispatch('roles/fetchRoles')
-        await store.dispatch('users/fetch')
+        await store.dispatch('tags/fetch')
+        await store.dispatch('categories/fetch')
     },
 
     data() {
@@ -103,13 +107,17 @@ export default {
             showSuccess: false,
             password: '',
             errors: [],
-            user: {},
+            tag: {},
             options: {
                 lang: 'pt-br',
                 columns: [
                     {
                         key: 'name',
                         title: 'Nome',
+                    },
+                    {
+                        key: 'category',
+                        title: 'Categoria',
                     },
                     {
                         title: 'Ações',
@@ -123,11 +131,11 @@ export default {
     },
 
     computed: {
-        users() {
-            return this.$store.state.users.users
+        tags() {
+            return this.$store.state.tags.tags
         },
-        roles() {
-            return this.$store.state.roles.roles.map(r => r.name)
+        categorias() {
+            return this.$store.state.categories.categories.map(c=>c.name)
         },
     },
 
@@ -135,7 +143,7 @@ export default {
         showCreateForm() {
             this.showForm({
                 action: 'create',
-                data: { name: '', email: '', password: '', roles: [] },
+                data: { name: '', description: '', category: '' },
             })
         },
         hide(modalRef) {
@@ -147,7 +155,7 @@ export default {
             let { action, data } = payload
             this.showSuccess = false
             this.errors = []
-            this.user = { ...data }
+            this.tag = { ...data }
             this.$refs['form-' + action].show()
         },
         submit(form) {
@@ -157,16 +165,16 @@ export default {
             this.showSuccess = false
 
             let action
-            let data = this.user
+            let data = this.tag
             switch (form) {
                 case 'create':
-                    action = 'users/create'
+                    action = 'tags/create'
                     break
                 case 'edit':
-                    action = 'users/update'
+                    action = 'tags/update'
                     break
                 case 'delete':
-                    action = 'users/delete'
+                    action = 'tags/delete'
                     data = { ...data, password: this.password }
                     break
             }

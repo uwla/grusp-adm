@@ -1,30 +1,28 @@
 <template>
     <main>
-        <h1>TAGS</h1>
+        <h1>CARGOS</h1>
 
         <b-button variant="success" @click="showCreateForm()">
-            CRIAR TAG
+            CRIAR CARGO
         </b-button>
 
-        <vue-data-table v-bind="options" :data="tags" @userEvent="showForm" />
+        <vue-data-table v-bind="options" :data="roles" @userEvent="showForm" />
 
-        <b-modal ref="form-create" title="CRIAR TAG" hide-footer>
-            <message-errors :errors="errors" @hide="hideErrors()" />
+        <b-modal ref="form-create" title="CRIAR CARGO" hide-footer>
             <message-success :show="showSuccess" @hide="hideSuccess()">
-                TAG CRIADA!
+                CARGO CRIADO!
             </message-success>
+            <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="tag.name" name="name" />
+                    <b-form-input v-model="role.name" name="name" />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="tag.description"  name="description" />
+                    <b-form-textarea v-model="role.description"  name="description" />
                 </b-form-group>
-                <b-form-group label="Categoria">
-                    <b-form-select
-                        v-model="tag.category"
-                        :options="categorias"
-                    />
+                <b-form-group label="Permissões">
+                    <b-form-select v-model="role.permissions" multiple
+                        :options="permissions" :select-size="12" />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-create')">
@@ -37,23 +35,21 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-edit" title="EDITAR TAG" hide-footer>
-            <message-errors :errors="errors" @hide="hideErrors()" />
+        <b-modal ref="form-edit" title="EDITAR CARGO" hide-footer>
             <message-success :show="showSuccess" @hide="hideSuccess()">
-                TAG ATUALIZADA!
+                CARGO ATUALIZADO!
             </message-success>
+            <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="tag.name" name="name" />
+                    <b-form-input v-model="role.name"  name="name" />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="tag.description"  name="description" />
+                    <b-form-textarea v-model="role.description"  name="description" />
                 </b-form-group>
-                <b-form-group label="Categoria">
-                    <b-form-select
-                        v-model="tag.category"
-                        :options="categorias"
-                    />
+                <b-form-group label="Permissões">
+                    <b-form-select v-model="role.permissions" multiple
+                        :options="permissions" :select-size="12" />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-edit')">
@@ -66,11 +62,11 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-delete" title="DELETAR TAG" hide-footer>
-            <p>Tem certeza que deseja deletar a tag <i>{{ tag.name }}</i>?</p>
+        <b-modal ref="form-delete" title="DELETAR CARGO" hide-footer>
+            <p>Tem certeza que deseja deletar o cargo <i>{{ role.name }}</i>?</p>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <message-success :show="showSuccess" @hide="hideSuccess()">
-                TAG DELETADA!
+                CARGO DELETADO!
             </message-success>
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
@@ -88,17 +84,16 @@
         </b-modal>
     </main>
 </template>
-
 <script>
 import { VdtActionButtons } from '@uwlajs/vue-data-table'
-import { parseResponseErrors } from '../../utils'
+import { parseResponseErrors } from '../utils'
 
 export default {
     middleware: 'auth',
 
     async asyncData({ store }) {
-        await store.dispatch('tags/fetch')
-        await store.dispatch('tags/fetchCategorias')
+        await store.dispatch('roles/fetch')
+        await store.dispatch('permissions/fetch')
     },
 
     data() {
@@ -107,43 +102,40 @@ export default {
             showSuccess: false,
             password: '',
             errors: [],
-            tag: {},
+            role: {},
             options: {
                 lang: 'pt-br',
+                sortingMode: 'single',
                 columns: [
                     {
                         key: 'name',
-                        title: 'Nome',
-                    },
-                    {
-                        key: 'category',
-                        title: 'Categoria',
+                        title: 'Nome'
                     },
                     {
                         title: 'Ações',
                         cssClass: 'wmin',
                         component: VdtActionButtons,
-                        componentProps: { actions: ['edit', 'delete'] },
-                    },
-                ],
-            },
+                        componentProps: { actions: ['edit', 'delete'] }
+                    }
+                ]
+            }
         }
     },
 
     computed: {
-        tags() {
-            return this.$store.state.tags.tags
+        roles() {
+            return this.$store.state.roles.roles
         },
-        categorias() {
-            return this.$store.state.tags.categorias
-        },
+        permissions() {
+            return this.$store.state.permissions.permissions
+        }
     },
 
     methods: {
         showCreateForm() {
             this.showForm({
                 action: 'create',
-                data: { name: '', description: '', category: '' },
+                data: { name: '', description: '', permissions: [] }
             })
         },
         hide(modalRef) {
@@ -155,7 +147,7 @@ export default {
             let { action, data } = payload
             this.showSuccess = false
             this.errors = []
-            this.tag = { ...data }
+            this.role = { ...data }
             this.$refs['form-' + action].show()
         },
         submit(form) {
@@ -165,22 +157,21 @@ export default {
             this.showSuccess = false
 
             let action
-            let data = this.tag
+            let data = this.role
             switch (form) {
                 case 'create':
-                    action = 'tags/create'
+                    action = 'roles/create'
                     break
                 case 'edit':
-                    action = 'tags/update'
+                    action = 'roles/update'
                     break
                 case 'delete':
-                    action = 'tags/delete'
-                    data = { ...data, password: this.password }
+                    action = 'roles/delete'
+                    data.password = this.password
                     break
             }
 
-            this.$store
-                .dispatch(action, data)
+            this.$store.dispatch(action, data)
                 .then(() => {
                     this.showSuccess = true
                     setTimeout(() => this.hide('form-' + form), 1500)
@@ -198,7 +189,7 @@ export default {
         },
         hideSuccess() {
             this.showSuccess = false
-        },
-    },
+        }
+    }
 }
 </script>
