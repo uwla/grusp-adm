@@ -8,7 +8,7 @@
 
         <vue-data-table v-bind="options" :data="tags" @userEvent="showForm" />
 
-        <b-modal ref="form-create" title="CRIAR TAG" hide-footer>
+        <b-modal id="form-create" title="CRIAR TAG" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <message-success :show="showSuccess" @hide="hideSuccess()">
                 TAG CRIADA!
@@ -37,7 +37,7 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-edit" title="EDITAR TAG" hide-footer>
+        <b-modal id="form-edit" title="EDITAR TAG" hide-footer>
             <message-errors :errors="errors" @hide="hideErrors()" />
             <message-success :show="showSuccess" @hide="hideSuccess()">
                 TAG ATUALIZADA!
@@ -66,29 +66,14 @@
             </form>
         </b-modal>
 
-        <b-modal ref="form-delete" title="DELETAR TAG" hide-footer>
-            <p>Tem certeza que deseja deletar a tag <i>{{ tag.name }}</i>?</p>
-            <message-errors :errors="errors" @hide="hideErrors()" />
-            <message-success :show="showSuccess" @hide="hideSuccess()">
-                TAG DELETADA!
-            </message-success>
-            <form @submit.prevent="submit('delete')">
-                <b-form-group label="Digite sua senha" label-for="password">
-                    <b-form-input type="password" v-model="password"  name="password" />
-                </b-form-group>
-                <div class="text-right">
-                    <b-button variant="info" @click="hide('form-delete')">
-                        CANCELAR
-                    </b-button>
-                    <b-button variant="danger" @click="submit('delete')">
-                        DELETAR
-                    </b-button>
-                </div>
-            </form>
-        </b-modal>
+        <form-delete
+            action="tags/delete"
+            messageDeleted="TAG DELETADA!"
+            :messageConfirmation="`Certeza que deseja deletar a tag ${tag.name}?`"
+            :modelId="tag.id"
+            title="DELETAR TAG" />
     </main>
 </template>
-
 <script>
 import { VdtActionButtons } from '@uwlajs/vue-data-table'
 import { parseResponseErrors } from '../utils'
@@ -147,7 +132,7 @@ export default {
             })
         },
         hide(modalRef) {
-            this.$refs[modalRef].hide()
+            this.$bvModal.hide(modalRef)
             this.errors = []
             this.password = ''
         },
@@ -156,7 +141,7 @@ export default {
             this.showSuccess = false
             this.errors = []
             this.tag = { ...data }
-            this.$refs['form-' + action].show()
+            this.$bvModal.show('form-'+action)
         },
         submit(form) {
             if (this.busy) return
@@ -172,10 +157,6 @@ export default {
                     break
                 case 'edit':
                     action = 'tags/update'
-                    break
-                case 'delete':
-                    action = 'tags/delete'
-                    data = { ...data, password: this.password }
                     break
             }
 
