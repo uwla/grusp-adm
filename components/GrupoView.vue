@@ -55,7 +55,7 @@
             <b>Fotos do grupo:</b>
             <b-carousel :interval="0" controls indicators background="black">
                 <b-carousel-slide v-for="image,i in grupo.images" :key="i"
-                    :img-src="image.url" img-height="250px" />
+                    :img-src="image.url || image" img-height="250px" />
             </b-carousel>
             <br />
         </div>
