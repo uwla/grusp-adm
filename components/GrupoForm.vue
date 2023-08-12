@@ -178,7 +178,7 @@ export default {
                 .then(res => {
                     this.hideErrors()
                     this.showSuccess = true
-                    console.log(res.data)
+                    window.scrollTo({ 'top': 0, behavior: 'smooth' })
                 })
                 .catch(e => {
                     this.handleErrors(e.response.data.errors)
