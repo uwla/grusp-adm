@@ -64,7 +64,7 @@ export default {
             local: {
                 provider: 'local',
                 endpoints: {
-                    login: { url: '/auth/login_admin', method: 'post' },
+                    login: { url: '/auth/login/admin', method: 'post' },
                     logout: { url: '/auth/logout', method: 'post' },
                     user: { url: '/account/profile', method: 'get' },
                 },
