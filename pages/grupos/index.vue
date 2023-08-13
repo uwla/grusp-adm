@@ -27,6 +27,7 @@ export default {
     data() {
         return {
             params: {
+                lang: 'pt-br',
                 sortingMode: 'single',
                 columns: [
                     {

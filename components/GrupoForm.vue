@@ -11,22 +11,25 @@
         <!-- FORM -->
         <form class="form" @submit.prevent="nothing()">
             <b-form-group label="Título" label-for="titulo">
-                <b-form-input type="text" v-model="titulo" id="titulo" />
+                <b-form-input type="text" v-model="titulo" id="titulo" required />
             </b-form-group>
+
             <b-form-group label="Descrição" label-for="descricao">
-                <b-form-textarea v-model="descricao" id="descricao" rows="8" />
+                <b-form-textarea v-model="descricao" id="descricao" rows="8" required/>
             </b-form-group>
 
             <b-form-group label="Imagem Principal">
                 <div v-if="imgURI">
                     <img :src="imgURI" alt="">
-                    <p class="text-center">A imagem acima será a imagem do grupo</p>
+                    <p class="text-center">
+                        A imagem acima será a imagem do grupo
+                    </p>
                 </div>
                 <vue-anka-cropper :options="cropperOptions" @cropper-saved="updateImg" />
             </b-form-group>
 
             <b-form-group label="Fotos do grupo (adicionar fotos)" label-for="images">
-                <b-form-file v-model="images" id="images" accept=".jpg" multiple />
+                <b-form-file v-model="images" id="images" accept=".jpg,.png" multiple />
             </b-form-group>
 
             <b-form-group v-if="imagesCurrent.length > 0"
@@ -39,22 +42,23 @@
             </b-form-group>
 
             <b-form-group label="Informações de contato" label-for="contato">
-                <b-form-textarea v-model="contato" id="contato" rows="3" />
+                <b-form-textarea v-model="contato" id="contato" rows="3" min="5" />
             </b-form-group>
+
             <b-form-group label="Informações de horários de encontro" label-for="horario">
-                <b-form-textarea v-model="horario" id="horario" rows="3" />
+                <b-form-textarea v-model="horario" id="horario" rows="3" min="5" />
             </b-form-group>
             <b-form-group label="Informações do lugar de encontro" label-for="lugar">
-                <b-form-textarea v-model="lugar" id="lugar" rows="3" />
+                <b-form-textarea v-model="lugar" id="lugar" rows="3" min="5" />
             </b-form-group>
             <b-form-group label="Informações sobre mensalidade" label-for="mensalidade">
-                <b-form-textarea v-model="mensalidade" id="mensalidade" rows="3" />
+                <b-form-textarea v-model="mensalidade" id="mensalidade" rows="3" min="5" />
             </b-form-group>
             <b-form-group label="Informações sobre público alvo" label-for="publico">
-                <b-form-textarea v-model="publico" id="publico" rows="3" />
+                <b-form-textarea v-model="publico" id="publico" rows="3" min="5" />
             </b-form-group>
             <b-form-group label="Links úteis (redes sociais, grupos de mensagem, site)" label-for="links">
-                <b-form-textarea v-model="links" id="links" rows="3" />
+                <b-form-textarea v-model="links" id="links" rows="3" min="5" />
             </b-form-group>
 
             <b-form-group label="Categoria do grupo">

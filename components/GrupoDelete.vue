@@ -10,9 +10,11 @@
 
         <form class="form" @submit.prevent="submitForm()">
             <b-form-group label="Senha" label-for="password">
-                <b-form-input type="password" v-model="password" id="password" />
+                <b-form-input type="password" v-model="password" id="password" required />
             </b-form-group>
-            <b-button block variant="danger" type="submit">DELETAR</b-button>
+            <b-button block variant="danger" type="submit">
+                DELETAR
+            </b-button>
         </form>
     </div>
 </template>

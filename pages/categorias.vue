@@ -15,7 +15,7 @@
             </message-success>
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="category.name" name="name" />
+                    <b-form-input v-model="category.name" name="name" required />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
                     <b-form-textarea v-model="category.description"  name="description" />
@@ -38,7 +38,7 @@
             </message-success>
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="category.name" name="name" />
+                    <b-form-input v-model="category.name" name="name" required />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
                     <b-form-textarea v-model="category.description"  name="description" />
@@ -62,7 +62,7 @@
             </message-success>
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
-                    <b-form-input type="password" v-model="password"  name="password" />
+                    <b-form-input type="password" v-model="password"  name="password" required />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-delete')">

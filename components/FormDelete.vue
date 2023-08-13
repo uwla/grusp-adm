@@ -6,7 +6,7 @@
 
         <form @submit.prevent="deleteModel()">
             <b-form-group label="Confirme com sua senha:" label-for="password">
-                <b-form-input type="password" v-model="password" name="password" />
+                <b-form-input type="password" v-model="password" name="password" required />
             </b-form-group>
             <div class="text-right">
                 <b-button variant="danger" type="submit">

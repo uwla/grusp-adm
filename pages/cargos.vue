@@ -15,10 +15,10 @@
             <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="role.name" name="name" />
+                    <b-form-input v-model="role.name" name="name" required />
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="role.description"  name="description" />
+                    <b-form-textarea v-model="role.description" name="description" required />
                 </b-form-group>
                 <b-form-group label="Permissões">
                     <b-form-select v-model="role.permissions" multiple
@@ -42,10 +42,10 @@
             <message-errors :errors="errors" @hide="hideErrors()" />
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="role.name"  name="name" />
+                    <b-form-input v-model="role.name" name="name" required/>
                 </b-form-group>
                 <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="role.description"  name="description" />
+                    <b-form-textarea v-model="role.description" name="description" />
                 </b-form-group>
                 <b-form-group label="Permissões">
                     <b-form-select v-model="role.permissions" multiple
@@ -70,7 +70,7 @@
             </message-success>
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
-                    <b-form-input type="password" v-model="password"  name="password" />
+                    <b-form-input type="password" v-model="password" name="password" required />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-delete')">

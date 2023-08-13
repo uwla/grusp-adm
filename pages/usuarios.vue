@@ -15,13 +15,13 @@
             </message-success>
             <form @submit.prevent="submit('create')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="user.name" name="name" />
+                    <b-form-input v-model="user.name" name="name" required />
                 </b-form-group>
                 <b-form-group label="Email" label-for="email">
-                    <b-form-input v-model="user.email"  name="email" type="email"/>
+                    <b-form-input v-model="user.email"  name="email" type="email" required />
                 </b-form-group>
                 <b-form-group label="Senha" label-for="password">
-                    <b-form-input v-model="user.password"  name="password" type="password"/>
+                    <b-form-input v-model="user.password"  name="password" type="password" required/>
                 </b-form-group>
                 <b-form-group label="Cargos">
                     <b-form-select v-model="user.roles" :options="roles" multiple />
@@ -44,10 +44,10 @@
             </message-success>
             <form @submit.prevent="submit('edit')">
                 <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="user.name" name="name" />
+                    <b-form-input v-model="user.name" name="name" required />
                 </b-form-group>
                 <b-form-group label="Email" label-for="email">
-                    <b-form-textarea v-model="user.email" name="email" />
+                    <b-form-textarea v-model="user.email" name="email" required />
                 </b-form-group>
                 <b-form-group label="Cargos">
                     <b-form-select v-model="user.roles" :options="roles" multiple />
@@ -71,7 +71,7 @@
             </message-success>
             <form @submit.prevent="submit('delete')">
                 <b-form-group label="Digite sua senha" label-for="password">
-                    <b-form-input type="password" v-model="password"  name="password" />
+                    <b-form-input type="password" v-model="password"  name="password" required />
                 </b-form-group>
                 <div class="text-right">
                     <b-button variant="info" @click="hide('form-delete')">
