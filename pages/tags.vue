@@ -114,7 +114,11 @@ export default {
 
     computed: {
         tags() {
-            return this.$store.state.tags.tags
+            return this.$store.state.tags.tags.map(t => {
+                if (t.category == null)
+                    return {...t, category: ''}
+                return t
+            })
         },
         categorias() {
             return this.$store.state.categories.categories.map(c=>c.name)
