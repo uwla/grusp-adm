@@ -1,93 +1,7 @@
 <template>
-    <main>
-        <h1>CARGOS</h1>
-
-        <b-button variant="success" @click="showCreateForm()">
-            CRIAR CARGO
-        </b-button>
-
-        <vue-data-table v-bind="options" :data="roles" @userEvent="showForm" />
-
-        <b-modal ref="form-create" title="CRIAR CARGO" hide-footer>
-            <message-success :show="showSuccess" @hide="hideSuccess()">
-                CARGO CRIADO!
-            </message-success>
-            <message-errors :errors="errors" @hide="hideErrors()" />
-            <form @submit.prevent="submit('create')">
-                <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="role.name" name="name" required />
-                </b-form-group>
-                <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="role.description" name="description" required />
-                </b-form-group>
-                <b-form-group label="Permissões">
-                    <b-form-select v-model="role.permissions" multiple
-                        :options="permissions" :select-size="12" />
-                </b-form-group>
-                <div class="text-right">
-                    <b-button variant="info" @click="hide('form-create')">
-                        CANCELAR
-                    </b-button>
-                    <b-button variant="success" @click="submit('create')">
-                        SALVAR
-                    </b-button>
-                </div>
-            </form>
-        </b-modal>
-
-        <b-modal ref="form-edit" title="EDITAR CARGO" hide-footer>
-            <message-success :show="showSuccess" @hide="hideSuccess()">
-                CARGO ATUALIZADO!
-            </message-success>
-            <message-errors :errors="errors" @hide="hideErrors()" />
-            <form @submit.prevent="submit('edit')">
-                <b-form-group label="Nome" label-for="name">
-                    <b-form-input v-model="role.name" name="name" required/>
-                </b-form-group>
-                <b-form-group label="Descrição (opcional)" label-for="description">
-                    <b-form-textarea v-model="role.description" name="description" />
-                </b-form-group>
-                <b-form-group label="Permissões">
-                    <b-form-select v-model="role.permissions" multiple
-                        :options="permissions" :select-size="12" />
-                </b-form-group>
-                <div class="text-right">
-                    <b-button variant="info" @click="hide('form-edit')">
-                        CANCELAR
-                    </b-button>
-                    <b-button variant="success" @click="submit('edit')">
-                        SALVAR
-                    </b-button>
-                </div>
-            </form>
-        </b-modal>
-
-        <b-modal ref="form-delete" title="DELETAR CARGO" hide-footer>
-            <p>Tem certeza que deseja deletar o cargo <i>{{ role.name }}</i>?</p>
-            <message-errors :errors="errors" @hide="hideErrors()" />
-            <message-success :show="showSuccess" @hide="hideSuccess()">
-                CARGO DELETADO!
-            </message-success>
-            <form @submit.prevent="submit('delete')">
-                <b-form-group label="Digite sua senha" label-for="password">
-                    <b-form-input type="password" v-model="password" name="password" required />
-                </b-form-group>
-                <div class="text-right">
-                    <b-button variant="info" @click="hide('form-delete')">
-                        CANCELAR
-                    </b-button>
-                    <b-button variant="danger" @click="submit('delete')">
-                        DELETAR
-                    </b-button>
-                </div>
-            </form>
-        </b-modal>
-    </main>
+    <grusp-dashboard v-bind="{fields, tableParams}" namespace="roles" title="CARGOS" />
 </template>
 <script>
-import { VdtActionButtons } from '@uwlajs/vue-data-table'
-import { parseResponseErrors } from '../utils'
-
 export default {
     middleware: 'auth',
 
@@ -98,23 +12,15 @@ export default {
 
     data() {
         return {
-            busy: false,
-            showSuccess: false,
-            password: '',
-            errors: [],
-            role: {},
-            options: {
+            tableParams: {
                 lang: 'pt-br',
                 sortingMode: 'single',
                 columns: [
-                    {
-                        key: 'name',
-                        title: 'Nome'
-                    },
+                    { key: 'name', title: 'Nome' },
                     {
                         title: 'Ações',
                         cssClass: 'wmin',
-                        component: VdtActionButtons,
+                        component: 'vdt-action-buttons',
                         componentProps: { actions: ['edit', 'delete'] }
                     }
                 ]
@@ -123,73 +29,26 @@ export default {
     },
 
     computed: {
-        roles() {
-            return this.$store.state.roles.roles
+        fields() {
+            return [
+                'id',
+                'name:name|label:Nome|text',
+                'name:description|label:Descrição (opcional)|textarea|rows=4',
+                {
+                    name: 'permissions',
+                    label: 'Permissões',
+                    type: 'select',
+                    props: { multiple: true, options: this.permissionsOptions },
+                },
+                'buttons'
+            ]
         },
         permissions() {
             return this.$store.state.permissions.permissions
+        },
+        permissionsOptions() {
+            return this.permissions.map(p => ({ value: p, text: p }))
         }
     },
-
-    methods: {
-        showCreateForm() {
-            this.showForm({
-                action: 'create',
-                data: { name: '', description: '', permissions: [] }
-            })
-        },
-        hide(modalRef) {
-            this.$refs[modalRef].hide()
-            this.errors = []
-            this.password = ''
-        },
-        showForm(payload) {
-            let { action, data } = payload
-            this.showSuccess = false
-            this.errors = []
-            this.role = { ...data }
-            this.$refs['form-' + action].show()
-        },
-        submit(form) {
-            if (this.busy) return
-            this.busy = true
-            this.errors = []
-            this.showSuccess = false
-
-            let action
-            let data = this.role
-            switch (form) {
-                case 'create':
-                    action = 'roles/create'
-                    break
-                case 'edit':
-                    action = 'roles/update'
-                    break
-                case 'delete':
-                    action = 'roles/delete'
-                    data.password = this.password
-                    break
-            }
-
-            this.$store.dispatch(action, data)
-                .then(() => {
-                    this.showSuccess = true
-                    setTimeout(() => this.hide('form-' + form), 1500)
-                })
-                .catch(exception => {
-                    this.errors = parseResponseErrors(exception.response)
-                })
-                .finally(() => {
-                    this.busy = false
-                    this.password = ''
-                })
-        },
-        hideErrors() {
-            this.errors = []
-        },
-        hideSuccess() {
-            this.showSuccess = false
-        }
-    }
 }
 </script>
