@@ -6,7 +6,7 @@
         <vue-data-table v-bind="tableParams" :data="data" @userEvent="handleUserEvent" />
 
         <b-modal ref="modal" :title="formTitle" hide-footer>
-            <vue-form-builder v-bind="formParams" @submit="submitForm" />
+            <vue-form-builder v-bind="formParams" @submit="submitForm" @reset="closeForm" />
         </b-modal>
     </main>
 </template>
