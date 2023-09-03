@@ -1,5 +1,8 @@
 <template>
-    <b-form-checkbox-group v-model="selectedImages" @input="handleInput">
+    <div v-if="images.length === 0">
+        <i>Nenhuma imagem encontrada</i>
+    </div>
+    <b-form-checkbox-group v-else v-model="selectedImages" @input="handleInput">
         <b-form-checkbox v-for="img, i in images" :key="i" :value="img.id">
             <img class="img-checkbox" :src="img.url">
         </b-form-checkbox>

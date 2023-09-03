@@ -124,6 +124,7 @@ export default {
                 },
                 {
                     component: 'vdt-action-buttons',
+                    componentProps: { actions: ['edit', 'delete'] },
                     title: 'Ações',
                 },
             ],
