@@ -34,9 +34,13 @@ export function createMutations(modelName) {
 
 export function createActions(endpoint) {
     return {
-        async create({ commit }, payload) {
-            let data = { ...payload }
-            data = (await this.$axios.post(endpoint, data)).data
+        async create({ commit }, data) {
+            // if data has file, we need to add some headers
+            let headers = {}
+            if (data instanceof FormData)
+                headers['ContentType'] = 'multipart/form-data'
+
+            data = (await this.$axios.post(endpoint, data, headers)).data
             commit('addModel', data)
         },
 
@@ -45,16 +49,35 @@ export function createActions(endpoint) {
             commit('setModels', models)
         },
 
-        async update({ commit }, payload) {
-            let data = { ...payload }
-            let { id } = data
-            data._method = 'PUT'
-            data = (await this.$axios.post(`${endpoint}/${id}`, data)).data
+        async update({ commit }, data) {
+            let headers = {}
+            let id
+
+            // We need to:
+            // 1. get the id of the resource being updated.
+            // 2. add "_method" field set to "PUT" due to Laravel API requirements
+
+            // if data has file, it is an instance of form data
+            if (data instanceof FormData) {
+                id = data.get('id')
+                data.append('_method', 'PUT')
+
+                // we also need to set the headers
+                headers['ContentType'] = 'multipart/form-data'
+            }
+
+            // otherwise, it is a JS Object
+            else {
+                id = data['id']
+                data['_method'] = 'PUT'
+            }
+
+            const url = `${endpoint}/${id}`
+            data = (await this.$axios.post(url, data, headers)).data
             commit('updateModel', data)
         },
 
-        async delete({ commit }, payload) {
-            let data = { ...payload }
+        async delete({ commit }, data) {
             let { id } = data
             await this.$axios.delete(`${endpoint}/${id}`, { data })
             commit('deleteModel', data)

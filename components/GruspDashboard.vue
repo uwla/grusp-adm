@@ -5,7 +5,7 @@
 
         <vue-data-table v-bind="tableParams" :data="data" @userEvent="handleUserEvent" />
 
-        <b-modal ref="modal" :title="formTitle" hide-footer>
+        <b-modal ref="modal" :size="bModalSize" :title="formTitle" hide-footer>
             <vue-form-builder v-bind="formParams" @submit="submitForm" @reset="closeForm" />
         </b-modal>
     </main>
@@ -22,6 +22,7 @@ export default {
                 errors: this.errors,
                 fields: this.formFields,
                 model: this.model,
+                omitNull: true,
                 useBootstrap: true,
                 validateOnSubmit: false,
             }
@@ -35,6 +36,7 @@ export default {
             formTitle: '',
             formAction: '',
             formFields: [],
+            bModalSize: this.modalSize,
 
             // form fields used for deletion
             fieldsDeletion: ['id', 'password_confirmation', 'buttons'],
@@ -54,21 +56,22 @@ export default {
                 if (Array.isArray(val))
                     data[key] = []
             }
-            this.showForm(data, 'ADICIONAR', 'create', this.fields)
+            this.showForm(data, 'ADICIONAR', 'create', this.fields, this.modalSize)
          },
         handleUserEvent(payload) {
             let { action, data } = payload
             if (action === 'edit')
-                this.showForm(data, 'EDITAR', 'update', this.fields)
+                this.showForm(data, 'EDITAR', 'update', this.fields, this.modalSize)
             if (action === 'delete')
-                this.showForm(data, `DELETAR ${data.name}`, 'delete', this.fieldsDeletion)
+                this.showForm(data, `DELETAR ${data.name||data.titulo}`, 'delete', this.fieldsDeletion, 'md')
         },
-        showForm(data, title, action, fields) {
+        showForm(data, title, action, fields, modalSize) {
             this.errors = {}
             this.model = {...data}
             this.formTitle = title
             this.formAction = action
             this.formFields = fields
+            this.bModalSize = modalSize
             this.$refs['modal'].show()
         },
         showSuccess() {
@@ -82,7 +85,6 @@ export default {
             })
         },
         submitForm(data) {
-            console.log("opa", data)
             // do not make new request if it is busy making one
             if (this.isBusy) return
 
@@ -126,6 +128,9 @@ export default {
         title: {
             required: true,
             type: String,
+        },
+        modalSize: {
+            default: "md",
         }
     }
 }

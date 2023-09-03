@@ -1,3 +1,5 @@
+import { createActions, createMutations } from "../utils"
+
 export function state() {
     return {
         tags: [],
@@ -36,23 +38,19 @@ export const getters = {
 }
 
 export const mutations = {
+    ...createMutations('grupos'),
+
     setTags(state, tags) {
         state.tags = tags
-    },
-    setGrupos(state, grupos) {
-        state.grupos = grupos
     },
 }
 
 export const actions = {
+    ...createActions('grupo'),
+
     async fetchTags({ commit }) {
         const url = '/public/tags'
         const tags = (await this.$axios.get(url)).data
         commit('setTags', tags)
-    },
-    async fetchGrupos({ commit }) {
-        const url = '/grupo'
-        const grupos = (await this.$axios.get(url)).data
-        commit('setGrupos', grupos)
     },
 }
