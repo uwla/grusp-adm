@@ -39,7 +39,7 @@ export default {
             bModalSize: this.modalSize,
 
             // form fields used for deletion
-            fieldsDeletion: ['id', 'password_confirmation', 'buttons'],
+            fieldsDelete: ['id', 'password_confirmation', 'buttons'],
         }
     },
     methods: {
@@ -56,14 +56,14 @@ export default {
                 if (Array.isArray(val))
                     data[key] = []
             }
-            this.showForm(data, 'ADICIONAR', 'create', this.fields, this.modalSize)
+            this.showForm(data, 'ADICIONAR', 'create', this.fieldsCreate || this.fields, this.modalSize)
          },
         handleUserEvent(payload) {
             let { action, data } = payload
             if (action === 'edit')
-                this.showForm(data, 'EDITAR', 'update', this.fields, this.modalSize)
+                this.showForm(data, 'EDITAR', 'update', this.fieldsEdit || this.fields, this.modalSize)
             if (action === 'delete')
-                this.showForm(data, `DELETAR ${data.name||data.titulo}`, 'delete', this.fieldsDeletion, 'md')
+                this.showForm(data, `DELETAR ${data.name||data.titulo}`, 'delete', this.fieldsDelete, 'md')
         },
         showForm(data, title, action, fields, modalSize) {
             this.errors = {}
@@ -118,7 +118,13 @@ export default {
             type: Object,
         },
         fields: {
-            required: true,
+            required: false,
+            type: Array,
+        },
+        fieldsCreate: {
+            type: Array,
+        },
+        fieldsEdit: {
             type: Array,
         },
         namespace: {
