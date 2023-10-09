@@ -3,18 +3,18 @@ export default {
     head: {
         title: 'GRUSP ADMIN',
         htmlAttrs: {
-            lang: 'en',
+            lang: 'en'
         },
         meta: [
             { charset: 'utf-8' },
             {
                 name: 'viewport',
-                content: 'width=device-width, initial-scale=1',
+                content: 'width=device-width, initial-scale=1'
             },
             { hid: 'description', name: 'description', content: '' },
-            { name: 'format-detection', content: 'telephone=no' },
+            { name: 'format-detection', content: 'telephone=no' }
         ],
-        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
@@ -25,7 +25,7 @@ export default {
         '~/plugins/vue-data-table.js',
         '~/plugins/vue-form-builder.js',
         '~/plugins/vue-anka-cropper.js',
-        '~/plugins/vue-multiselect.js',
+        '~/plugins/vue-multiselect.js'
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -56,8 +56,8 @@ export default {
                     config.headers.common['Authorization'] = `Bearer ${token}`
                 }
                 return config
-            },
-        },
+            }
+        }
     },
 
     auth: {
@@ -72,7 +72,7 @@ export default {
                 token: {
                     property: 'token',
                     type: 'Bearer',
-                    required: true,
+                    required: true
                 },
                 user: {
                     property: false,
@@ -87,9 +87,9 @@ export default {
     },
 
     bootstrapVue: {
-        icons: true,
+        icons: true
     },
 
     // telemetry
-    telemetry: false,
+    telemetry: false
 }

@@ -81,6 +81,6 @@ export function createActions(endpoint) {
             let { id } = data
             await this.$axios.delete(`${endpoint}/${id}`, { data })
             commit('deleteModel', data)
-        },
+        }
     }
 }

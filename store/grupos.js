@@ -3,7 +3,7 @@ import { createActions, createMutations } from "../utils"
 export function state() {
     return {
         tags: [],
-        grupos: [],
+        grupos: []
     }
 }
 
