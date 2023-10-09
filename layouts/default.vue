@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NavBar />
+        <AdminNavBar />
         <Nuxt />
         <AdminFooter />
     </div>
