@@ -15,7 +15,8 @@ body {
 main {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 32px;
+    padding: 64px 32px;
+    min-height: 100vh;
 }
 
 img {
